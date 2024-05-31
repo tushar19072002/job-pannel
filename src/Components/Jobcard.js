@@ -23,7 +23,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
             
             const jobData = responseData.data
             console.log(jobData);
-            console.log(jobData.location)
+            console.log(jobData._id)
             setJobDetails(jobData);
             setIsModalOpen(true);
             setError(null);
@@ -56,7 +56,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
                 </div>
             </main>
             {error && <p>Error: {error}</p>}
-            <ViewUpdateJobModal isOpen={isModalOpen} onClose={handleCloseModal} jobDetails={jobDetails} />
+            <ViewUpdateJobModal isOpen={isModalOpen} onClose={handleCloseModal} jobDetails={jobDetails} isViewOnly={true} />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
+const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
+  const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [isRemoteAllowed, setIsRemoteAllowed] = useState(false);
@@ -16,8 +17,10 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
   const [message, setMessage] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
 
+
   useEffect(() => {
     if (jobDetails) {
+      setId(jobDetails._id || "");
       setTitle(jobDetails.title || "");
       setLocation(jobDetails.location || "");
       setIsRemoteAllowed(jobDetails.isRemoteAllowed || false);
@@ -32,6 +35,34 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
       setStatus(jobDetails.status || "");
     }
   }, [jobDetails]);
+
+  const handleDeactivateClick = async () =>{
+    try {
+      const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
+      if(!accessToken){
+        throw new Error("Access Token not found in local storage");
+      }
+      const response = await fetch(`https://api-jobs.thinkscoopinc.com/job/${id}`,{
+        method :"PUT",
+        headers : {
+          "Content-Type": "application/json",
+          Authorization : `Bearer ${accessToken}`,
+
+        },
+        body: JSON.stringify({status:"INACTIVE"})
+      });
+
+      if(response.ok){
+        setStatus("INACTIVE");
+        setMessage("Job has been Deactivated.");
+      } else {
+        setMessage("Failed to deactivate the Job.");
+        }
+
+    } catch (error) {
+      setMessage("An error occured while deactivating the job.")
+    }
+  };
 
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
@@ -52,7 +83,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
   };
 
   const handleClearClick = () => {
-    // Clear all fields
+    
     setTitle("");
     setLocation("");
     setIsRemoteAllowed(false);
@@ -121,6 +152,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   <input
                     type="text"
                     value={title}
+                    disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setTitle(e.target.value)}
                     name="jobTitle"
                     id="jobTitle"
@@ -138,6 +170,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <input
                     type="text"
+                    disabled={isViewOnly && !isEditMode}
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     name="location"
@@ -158,6 +191,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                     name="isRemoteAllowed"
                     id="isRemoteAllowed"
                     value={isRemoteAllowed}
+                    disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setIsRemoteAllowed(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     required
@@ -176,6 +210,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <select
                     name="jobtype"
+                    disabled={isViewOnly && !isEditMode}
                     value={jobType}
                     onChange={(e) => setJobType(e.target.value)}
                     id="jobtype"
@@ -196,6 +231,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <input
                     type="number"
+                    disabled={isViewOnly && !isEditMode}
                     value={salaryBudget}
                     onChange={(e) => setSalaryBudget(e.target.value)}
                     name="salary"
@@ -214,6 +250,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <input
                     type="number"
+                    disabled={isViewOnly && !isEditMode}
                     value={minimumExperience}
                     onChange={(e) => setMinimumExperience(e.target.value)}
                     name="experience"
@@ -233,6 +270,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   <input
                     type="text"
                     value={perks}
+                    disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setPerks(e.target.value)}
                     name="perks"
                     id="perks"
@@ -250,6 +288,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <input
                     type="text"
+                    disabled={isViewOnly && !isEditMode}
                     value={timeZone}
                     onChange={(e) => setTimeZone(e.target.value)}
                     name="timezone"
@@ -269,6 +308,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   <textarea
                     id="description"
                     value={description}
+                    disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setDescription(e.target.value)}
                     rows="4"
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -284,6 +324,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <textarea
                     id="Responsibilities"
+                    disabled={isViewOnly && !isEditMode}
                     value={responsibilities}
                     onChange={(e) => setResponsibilities(e.target.value)}
                     rows="4"
@@ -300,6 +341,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <textarea
                     id="Qualifications"
+                    disabled={isViewOnly && !isEditMode}
                     value={qualifications}
                     onChange={(e) => setQualifications(e.target.value)}
                     rows="4"
@@ -316,6 +358,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
                   </label>
                   <select
                     name="jobstatus"
+                    disabled={isViewOnly && !isEditMode}
                     id="jobstatus"
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
@@ -331,7 +374,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
             <button
               type="button"
               onClick={handleEditClick}
-              disabled={isEditMode}
+              // disabled={isEditMode}
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-naone focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Edit Details
@@ -339,7 +382,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
             <button
               type="button"
               onClick={handleSaveClick}
-              disabled={!isEditMode}
+              // disabled={!isEditMode}
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Save Details
@@ -351,6 +394,14 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Clear Details
+            </button>
+            <button
+              type="button"
+              onClick={handleDeactivateClick}
+              disabled={!isEditMode}
+              className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+              Deactivate Job
             </button>
             {message && (
               <p className="text-sm text-red-500 mt-2">{message}</p>
