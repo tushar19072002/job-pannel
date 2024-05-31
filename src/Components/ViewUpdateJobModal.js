@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
+const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -15,6 +15,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
   const [qualifications, setQualifications] = useState("");
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [isViewOnly, setIsViewOnly] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
 
 
@@ -33,7 +34,9 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
       setResponsibilities(jobDetails.responsibilities || "");
       setQualifications(jobDetails.qualifications || "");
       setStatus(jobDetails.status || "");
+      setIsViewOnly(true);
     }
+    return () => setIsViewOnly(true);
   }, [jobDetails]);
 
   const handleDeactivateClick = async () =>{
@@ -67,7 +70,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
     try {
-      // Your fetch logic goes here for updating the job
+      
     } catch (error) {
       setMessage("An error occurred while updating the job.");
     }
@@ -75,11 +78,12 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
 
   const handleEditClick = () => {
     setIsEditMode(true);
+    setIsViewOnly(false);
   };
 
   const handleSaveClick = () => {
     setIsEditMode(false);
-    // Logic to save changes
+    
   };
 
   const handleClearClick = () => {
@@ -100,7 +104,8 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
 
   const handleClose = () => {
     onClose();
-    setMessage(""); // Reset message when closing modal
+    setMessage("");
+    
   };
 
   if (!isOpen) return null;
@@ -142,25 +147,29 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
 
           <form action="#">
           <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="jobTitle"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Job Title
-                  </label>
-                  <input
-                    type="text"
-                    value={title}
-                    disabled={isViewOnly && !isEditMode}
-                    onChange={(e) => setTitle(e.target.value)}
-                    name="jobTitle"
-                    id="jobTitle"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Enter job title"
-                    required
-                  />
-                </div>
+          <div>
+  <label
+    htmlFor="jobTitle"
+    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+  >
+    Job Title
+  </label>
+  <input
+    type="text"
+    value={title}
+    disabled={isViewOnly && !isEditMode}
+    onChange={(e) => setTitle(e.target.value)}
+    name="jobTitle"
+    id="jobTitle"
+    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+      isViewOnly && !isEditMode
+        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+    }`}
+    placeholder="Enter job title"
+    required
+  />
+</div>
                 <div>
                   <label
                     htmlFor="location"
@@ -175,7 +184,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     onChange={(e) => setLocation(e.target.value)}
                     name="location"
                     id="location"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Job Location"
                     required
                   />
@@ -193,7 +206,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     value={isRemoteAllowed}
                     disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setIsRemoteAllowed(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     required
                   >
                     <option value="">Select an option</option>
@@ -214,7 +231,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     value={jobType}
                     onChange={(e) => setJobType(e.target.value)}
                     id="jobtype"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     required
                   >
                     <option value="">Select an option</option>
@@ -236,7 +257,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     onChange={(e) => setSalaryBudget(e.target.value)}
                     name="salary"
                     id="salary"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Enter salary range"
                     required
                   />
@@ -255,7 +280,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     onChange={(e) => setMinimumExperience(e.target.value)}
                     name="experience"
                     id="experience"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Minimum experience required"
                     required
                   />
@@ -274,7 +303,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     onChange={(e) => setPerks(e.target.value)}
                     name="perks"
                     id="perks"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Great health benefits"
                     required
                   />
@@ -293,7 +326,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     onChange={(e) => setTimeZone(e.target.value)}
                     name="timezone"
                     id="timezone"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="IST"
                     required
                   />
@@ -311,7 +348,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     disabled={isViewOnly && !isEditMode}
                     onChange={(e) => setDescription(e.target.value)}
                     rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Write job description here"
                   ></textarea>
                 </div>
@@ -328,7 +369,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     value={responsibilities}
                     onChange={(e) => setResponsibilities(e.target.value)}
                     rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Job Responsibilities"
                   ></textarea>
                 </div>
@@ -345,7 +390,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     value={qualifications}
                     onChange={(e) => setQualifications(e.target.value)}
                     rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     placeholder="Qualifications Required"
                   ></textarea>
                 </div>
@@ -362,7 +411,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
                     id="jobstatus"
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      isViewOnly && !isEditMode
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                    }`}
                     required
                   >
                     <option value="">Select an option</option>
@@ -374,24 +427,32 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
             <button
               type="button"
               onClick={handleEditClick}
-              // disabled={isEditMode}
+              
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-naone focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Edit Details
             </button>
             <button
-              type="button"
-              onClick={handleSaveClick}
-              // disabled={!isEditMode}
-              className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Save Details
-            </button>
+  type="button"
+  onClick={handleSaveClick}
+  disabled={!isEditMode}
+  className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${
+    !isEditMode
+      ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+      : 'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80'
+  }`}
+>
+  Save Details
+</button>
             <button
               type="button"
               onClick={handleClearClick}
               disabled={!isEditMode}
-              className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${
+                !isEditMode
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80'
+              }`}
             >
               Clear Details
             </button>
@@ -399,7 +460,11 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails,isViewOnly  }) => {
               type="button"
               onClick={handleDeactivateClick}
               disabled={!isEditMode}
-              className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${
+                !isEditMode
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80'
+              }`}
             >
               Deactivate Job
             </button>
