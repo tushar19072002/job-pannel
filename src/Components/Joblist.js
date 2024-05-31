@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Jobcard from './Jobcard';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Joblist = () => {
   const [jobs, setJobs] = useState([]);
@@ -8,15 +8,12 @@ const Joblist = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const isLoggedIn = useSelector((state) =>state.isLoggedIn);
-  const dispatch = useDispatch();
-  
 
   useEffect(() => {
-    
     const fetchJobs = async (page) => {
       setLoading(true);
       try {
-        const response = await fetch(`https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=5&status=ACTIVE&sortBy=title&sortOrder=asc`);
+        const response = await fetch(`https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&status=ACTIVE&sortBy=title&sortOrder=asc`);
         const data = await response.json();
         if (data.statusCode === 200) {
           setJobs(data.data);
@@ -56,9 +53,10 @@ const Joblist = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="job-list grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
                 {jobs.map(job => (
                   <Jobcard 
+                    key={job._id} /* Add a key prop */
                     jobId={job._id}
                     title={job.title}
                     location={job.location}
