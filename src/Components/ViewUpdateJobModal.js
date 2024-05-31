@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ViewUpdateJobModal = ({ isOpen, onClose, jobData }) => {
+const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails }) => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [isRemoteAllowed, setIsRemoteAllowed] = useState(false);
@@ -17,21 +17,21 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobData }) => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    if (jobData) {
-      setTitle(jobData.title || "");
-      setLocation(jobData.location || "");
-      setIsRemoteAllowed(jobData.isRemoteAllowed || false);
-      setPerks(jobData.perks || "");
-      setTimeZone(jobData.timeZone || "");
-      setMinimumExperience(jobData.minimumExperience || 0);
-      setJobType(jobData.jobType || "");
-      setSalaryBudget(jobData.salaryBudget || 0);
-      setDescription(jobData.description || "");
-      setResponsibilities(jobData.responsibilities || "");
-      setQualifications(jobData.qualifications || "");
-      setStatus(jobData.status || "");
+    if (jobDetails) {
+      setTitle(jobDetails.title || "");
+      setLocation(jobDetails.location || "");
+      setIsRemoteAllowed(jobDetails.isRemoteAllowed || false);
+      setPerks(jobDetails.perks || "");
+      setTimeZone(jobDetails.timeZone || "");
+      setMinimumExperience(jobDetails.minimumExperience || 0);
+      setJobType(jobDetails.jobType || "");
+      setSalaryBudget(jobDetails.salaryBudget || 0);
+      setDescription(jobDetails.description || "");
+      setResponsibilities(jobDetails.responsibilities || "");
+      setQualifications(jobDetails.qualifications || "");
+      setStatus(jobDetails.status || "");
     }
-  }, [jobData]);
+  }, [jobDetails]);
 
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
