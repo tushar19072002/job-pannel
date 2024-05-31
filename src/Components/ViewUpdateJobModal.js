@@ -70,7 +70,38 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
     try {
-      
+      const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
+      if(!accessToken){
+        throw new Error("Access Token not found in local storage");
+      }
+      const response = await fetch(`https://api-jobs.thinkscoopinc.com/job/${id}`,{
+        method :"PUT",
+        headers : {
+          "Content-Type": "application/json",
+          Authorization : `Bearer ${accessToken}`,
+        },
+        body : JSON.stringify({
+          title,
+          location,
+          isRemoteAllowed,
+          perks,
+          timeZone,
+          minimumExperience,
+          jobType,
+          salaryBudget,
+          description,
+          responsibilities,
+          qualifications,
+          status,
+        }),
+      });
+      const data = await response.json();
+      if (response.status === 201){
+        setMessage("Job Details Updated Successfully");
+      }
+      else{
+        setMessage(data.message);
+      }
     } catch (error) {
       setMessage("An error occurred while updating the job.");
     }
@@ -81,10 +112,10 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
     setIsViewOnly(false);
   };
 
-  const handleSaveClick = () => {
-    setIsEditMode(false);
+  // const handleSaveClick = () => {
+  //   setIsEditMode(false);
     
-  };
+  // };
 
   const handleClearClick = () => {
     
@@ -434,7 +465,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
             </button>
             <button
   type="button"
-  onClick={handleSaveClick}
+  onClick={handleUpdateJobClick}
   disabled={!isEditMode}
   className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${
     !isEditMode

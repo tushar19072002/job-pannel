@@ -45,7 +45,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
                         <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                         <div className="mt-4 flex justify-between items-center">
                             <span className="rounded-full bg-green-200 px-4 py-1 text-xs font-medium text-gray-900">{location}</span>
-                            <span className="rounded-full bg-yellow-200 px-4 py-1 text-xs font-medium text-gray-900">{salary}</span>
+                            <span className="rounded-full bg-yellow-200 px-4 py-1 text-xs font-medium text-gray-900">INR:- {salary}</span>
                         </div>
                         <div className="mt-6 flex justify-center">
                             <button onClick={handleViewDetailClick} className="inline-block cursor-pointer rounded-lg border-2 border-gray-800 px-6 py-1 text-lg font-medium hover:bg-gray-800 hover:text-white">
