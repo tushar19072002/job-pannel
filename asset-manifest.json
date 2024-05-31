@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/job-pannel/static/css/main.5296599a.css",
+    "main.js": "/job-pannel/static/js/main.c57571cc.js",
+    "index.html": "/job-pannel/index.html",
+    "main.5296599a.css.map": "/job-pannel/static/css/main.5296599a.css.map",
+    "main.c57571cc.js.map": "/job-pannel/static/js/main.c57571cc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5296599a.css",
+    "static/js/main.c57571cc.js"
+  ]
+}
