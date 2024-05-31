@@ -5,8 +5,10 @@ const Jobcard = ({ title, location, salary, jobId }) => {
     const [jobDetails, setJobDetails] = useState(null);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false); // Add loading state
 
     const handleViewDetailClick = async () => {
+        setLoading(true); // Show the loader
         try {
             const response = await fetch(`https://api-jobs.thinkscoopinc.com/job/${jobId}`, {
                 method: "GET",
@@ -26,6 +28,8 @@ const Jobcard = ({ title, location, salary, jobId }) => {
         } catch (error) {
             setError(error.message);
             setJobDetails(null);
+        } finally {
+            setLoading(false); // Hide the loader
         }
     };
 
@@ -34,7 +38,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
     };
 
     return (
-        <div className="job-card shadow max-w-md bg-white border border-gray-300 rounded-md">
+        <div className="job-card shadow max-w-md bg-white border border-gray-300 rounded-md relative">
             <div className="p-4">
                 <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                 <div className="mt-4 flex justify-between items-center">
@@ -48,6 +52,11 @@ const Jobcard = ({ title, location, salary, jobId }) => {
                 </div>
             </div>
             {error && <p>Error: {error}</p>}
+            {loading && (
+                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-75">
+                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+                </div>
+            )}
             <ViewUpdateJobModal isOpen={isModalOpen} onClose={handleCloseModal} jobDetails={jobDetails} isViewOnly={true} />
         </div>
     );
