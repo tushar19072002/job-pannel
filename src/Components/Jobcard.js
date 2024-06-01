@@ -5,10 +5,10 @@ const Jobcard = ({ title, location, salary, jobId }) => {
     const [jobDetails, setJobDetails] = useState(null);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
 
     const handleViewDetailClick = async () => {
-        setLoading(true); // Show the loader
+        setLoading(true);
         try {
             const response = await fetch(`https://api-jobs.thinkscoopinc.com/job/${jobId}`, {
                 method: "GET",
@@ -29,7 +29,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
             setError(error.message);
             setJobDetails(null);
         } finally {
-            setLoading(false); // Hide the loader
+            setLoading(false);
         }
     };
 
@@ -38,16 +38,16 @@ const Jobcard = ({ title, location, salary, jobId }) => {
     };
 
     return (
-        <div className="job-card shadow max-w-md bg-white border border-gray-300 rounded-md relative">
+        <div className="job-card shadow  bg-white border border-gray-300 rounded-md relative">
             <div className="p-4">
                 <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                 <div className="mt-4 flex justify-between items-center">
                     <span className="rounded-full bg-green-200 px-4 py-1 text-xs font-medium text-gray-900">{location}</span>
-                    <span className="rounded-full bg-yellow-200 px-4 py-1 text-xs font-medium text-gray-900">INR:- {salary.toLocaleString('en-IN')}</span>
+                    <span className="rounded-full bg-yellow-200 px-4 py-1 text-xs font-medium text-gray-900">INR  {salary.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="mt-6 flex justify-center">
                     <button onClick={handleViewDetailClick} className="inline-block cursor-pointer rounded-lg border-2 border-gray-800 px-6 py-1 text-lg font-medium hover:bg-gray-800 hover:text-white">
-                        View Details
+                        View 
                     </button>
                 </div>
             </div>
