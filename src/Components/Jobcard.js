@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ViewUpdateJobModal from './ViewUpdateJobModal';
 
-const Jobcard = ({ title, location, salary, jobId }) => {
+const Jobcard = ({ title, location, salary, jobId,status }) => {
     const [jobDetails, setJobDetails] = useState(null);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +43,7 @@ const Jobcard = ({ title, location, salary, jobId }) => {
                 <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                 <div className="mt-4 flex justify-between items-center">
                     <span className="rounded-full bg-green-200 px-4 py-1 text-xs font-medium text-gray-900">{location}</span>
+                    <span className="rounded-full bg-green-200 px-4 py-1 text-xs font-medium text-gray-900">{status}</span>
                     <span className="rounded-full bg-yellow-200 px-4 py-1 text-xs font-medium text-gray-900">INR  {salary.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="mt-6 flex justify-center">

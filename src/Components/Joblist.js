@@ -89,23 +89,24 @@ const Joblist = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-between p-4">
-            <div>
-              <label htmlFor="filter">Filter: </label>
-              <select id="filter" value={filter} onChange={handleFilterChange}>
+          <div className="flex justify-between items-center p-4 bg-teal-600">
+            <div className="flex items-center space-x-4">
+              <label htmlFor="filter" className="text-white">Filter: </label>
+              <select id="filter" value={filter} onChange={handleFilterChange} className="border rounded px-2 py-1">
                 <option value="ALL">All</option>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
             </div>
-            <div>
-              <label htmlFor="search">Search: </label>
+            <div className="flex items-center space-x-4">
+              <label htmlFor="search" className="text-white">Search: </label>
               <input 
                 id="search" 
                 type="text" 
                 value={searchQuery} 
                 onChange={handleSearchChange} 
                 placeholder="Search by title"
+                className="border rounded px-2 py-1"
               />
             </div>
           </div>
@@ -130,7 +131,7 @@ const Joblist = () => {
             >
               Previous
             </button>
-            <span className="mx-2 px-4 py-2 border rounded">{currentPage}</span>
+            <span className="mx-2 px-4 py-2 border rounded">{currentPage} / {totalPages}</span>
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
