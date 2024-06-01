@@ -146,7 +146,8 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
       id="viewUpdateJobModal"
       tabIndex="-1"
       aria-hidden="true"
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50 pt-96"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
+      style={{ paddingTop: '600px' }}
     >
       <div className="relative p-4 w-full max-w-2xl h-auto md:h-auto ">
         <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">

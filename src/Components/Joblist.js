@@ -8,6 +8,8 @@ const Joblist = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const navigate = useNavigate();
 
@@ -38,6 +40,7 @@ const Joblist = () => {
 
     fetchJobs(currentPage);
   }, [currentPage, isLoggedIn]);
+
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -51,7 +54,6 @@ const Joblist = () => {
   };
 
   const handleJobDeactivation = (jobId) => {
-    
     setJobs(jobs.map(job => {
       if (job._id === jobId) {
         return { ...job, status: "INACTIVE" };
@@ -59,6 +61,21 @@ const Joblist = () => {
       return job;
     }));
   };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredJobs = jobs.filter(job => {
+    if (filter === 'ACTIVE' && job.status !== 'ACTIVE') return false;
+    if (filter === 'INACTIVE' && job.status !== 'INACTIVE') return false;
+    if (searchQuery && !job.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
+  });
 
   if (!isLoggedIn) {
     return null;
@@ -72,8 +89,28 @@ const Joblist = () => {
         </div>
       ) : (
         <>
+          <div className="flex justify-between p-4">
+            <div>
+              <label htmlFor="filter">Filter: </label>
+              <select id="filter" value={filter} onChange={handleFilterChange}>
+                <option value="ALL">All</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="search">Search: </label>
+              <input 
+                id="search" 
+                type="text" 
+                value={searchQuery} 
+                onChange={handleSearchChange} 
+                placeholder="Search by title"
+              />
+            </div>
+          </div>
           <div className="job-list grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-            {jobs.map(job => (
+            {filteredJobs.map(job => (
               <Jobcard 
                 key={job._id}
                 jobId={job._id}
@@ -81,7 +118,7 @@ const Joblist = () => {
                 location={job.location}
                 salary={job.salaryBudget}
                 status={job.status}
-                onJobDeactivation={handleJobDeactivation} // Pass the handler to Jobcard
+                onJobDeactivation={handleJobDeactivation}
               />
             ))}
           </div>
