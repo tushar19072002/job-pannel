@@ -89,17 +89,17 @@ const Joblist = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-between items-center p-4 bg-teal-600">
-            <div className="flex items-center space-x-4">
-              <label htmlFor="filter" className="text-white">Filter: </label>
+          <div className="flex items-center p-4 bg-teal-600 space-x-4">
+            <div className="flex items-center space-x-2 ">
+              <label htmlFor="filter" className="text-black font-semibold">Filter: </label>
               <select id="filter" value={filter} onChange={handleFilterChange} className="border rounded px-2 py-1">
                 <option value="ALL">All</option>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
             </div>
-            <div className="flex items-center space-x-4">
-              <label htmlFor="search" className="text-white">Search: </label>
+            <div className="flex items-center space-x-2 pl-8">
+              <label htmlFor="search" className="text-black font-semibold">Search: </label>
               <input 
                 id="search" 
                 type="text" 
