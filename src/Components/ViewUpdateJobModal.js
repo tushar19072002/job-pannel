@@ -66,6 +66,33 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
       setMessage("An error occured while deactivating the job.")
     }
   };
+  const handleActivateClick = async () =>{
+    try {
+      const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
+      if(!accessToken){
+        throw new Error("Access Token not found in local storage");
+      }
+      const response = await fetch(`https://api-jobs.thinkscoopinc.com/job/${id}`,{
+        method :"PUT",
+        headers : {
+          "Content-Type": "application/json",
+          Authorization : `Bearer ${accessToken}`,
+
+        },
+        body: JSON.stringify({status:"ACTIVE"})
+      });
+
+      if(response.ok){
+        setStatus("INACTIVE");
+        setMessage("Job has been Activated.");
+      } else {
+        setMessage("Failed to Activate the Job.");
+        }
+
+    } catch (error) {
+      setMessage("An error occured while Activating the job.")
+    }
+  };
 
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
@@ -112,10 +139,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
     setIsViewOnly(false);
   };
 
-  // const handleSaveClick = () => {
-  //   setIsEditMode(false);
-    
-  // };
+ 
 
   const handleClearClick = () => {
     
@@ -143,12 +167,12 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
 
   return (
     <div
-      id="viewUpdateJobModal"
-      tabIndex="-1"
-      aria-hidden="true"
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
-      style={{ paddingTop: '600px' }}
-    >
+  id="viewUpdateJobModal"
+  tabIndex="-1"
+  aria-hidden="true"
+  className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50 pt-[600px] sm:pt-[480px]"
+>
+
       <div className="relative p-4 w-full max-w-2xl h-auto md:h-auto ">
         <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
           <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
@@ -430,7 +454,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
                     placeholder="Qualifications Required"
                   ></textarea>
                 </div>
-                <div>
+                {/* <div>
                   <label
                     htmlFor="jobstatus"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -454,7 +478,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Disable</option>
                   </select>
-                </div>
+                </div> */}
               </div>
             <button
               type="button"
@@ -491,17 +515,17 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
               Clear
             </button>
             <button
-              type="button"
-              onClick={handleDeactivateClick}
-              disabled={!isEditMode}
-              className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 float-right ${
-                !isEditMode
-                  ? 'hidden'
-                  : 'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80'
-              }`}
-            >
-              Deactivate Job
-            </button>
+  type="button"
+  onClick={status === "ACTIVE" ? handleDeactivateClick : handleActivateClick}
+  disabled={!isEditMode}
+  className={`font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 float-right ${
+    !isEditMode
+      ? 'hidden'
+      : 'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80'
+  }`}
+>
+  {status === "ACTIVE" ? "Deactivate Job" : "Activate Job"}
+</button>
             {message && (
               <p className="text-sm text-red-500 mt-2">{message}</p>
             )}

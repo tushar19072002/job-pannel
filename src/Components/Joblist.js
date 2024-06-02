@@ -23,7 +23,14 @@ const Joblist = () => {
     const fetchJobs = async (page) => {
       setLoading(true);
       try {
-        const response = await fetch(`https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&sortBy=title&sortOrder=asc`);
+        let url = `https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&sortBy=title&sortOrder=asc`;
+        
+        // Modify the URL based on the filter selected
+        if (filter !== 'ALL') {
+          url += `&status=${filter}`;
+        }
+        
+        const response = await fetch(url);
         const data = await response.json();
         if (data.statusCode === 200) {
           setJobs(data.data);
@@ -37,9 +44,10 @@ const Joblist = () => {
         setLoading(false);
       }
     };
-
+  
     fetchJobs(currentPage);
-  }, [currentPage, isLoggedIn]);
+  }, [currentPage, filter, isLoggedIn]);
+  
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
