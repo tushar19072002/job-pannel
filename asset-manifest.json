@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/job-pannel/static/css/main.42e2b71e.css",
-    "main.js": "/job-pannel/static/js/main.e4f44fce.js",
+    "main.js": "/job-pannel/static/js/main.a9ccbb2b.js",
     "static/media/logo.jpg": "/job-pannel/static/media/logo.60654013744ade4534ef.jpg",
     "index.html": "/job-pannel/index.html",
     "main.42e2b71e.css.map": "/job-pannel/static/css/main.42e2b71e.css.map",
-    "main.e4f44fce.js.map": "/job-pannel/static/js/main.e4f44fce.js.map"
+    "main.a9ccbb2b.js.map": "/job-pannel/static/js/main.a9ccbb2b.js.map"
   },
   "entrypoints": [
     "static/css/main.42e2b71e.css",
-    "static/js/main.e4f44fce.js"
+    "static/js/main.a9ccbb2b.js"
   ]
 }
