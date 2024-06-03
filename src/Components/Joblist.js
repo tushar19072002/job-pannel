@@ -25,7 +25,7 @@ const Joblist = () => {
       try {
         let url = `https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&sortBy=title&sortOrder=asc`;
         
-        // Modify the URL based on the filter selected
+        
         if (filter !== 'ALL') {
           url += `&status=${filter}`;
         }
