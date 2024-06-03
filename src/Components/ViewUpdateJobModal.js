@@ -20,6 +20,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
   const [message, setMessage] = useState("");
   const [isViewOnly, setIsViewOnly] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
   }, [jobDetails]);
 
   const handleDeactivateClick = async () =>{
+    setLoading(true);
     try {
       const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
       if(!accessToken){
@@ -71,10 +73,13 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
     } catch (error) {
       // setMessage("An error occured while deactivating the job.")
       alert("An error occured while deactivating the job.")
+    } finally {
+      setLoading(false);
     }
   };
   
   const handleActivateClick = async () =>{
+    setLoading(true);
     try {
       const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
       if(!accessToken){
@@ -103,11 +108,14 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
     } catch (error) {
       // setMessage("An error occured while Activating the job.")
       alert("An error occured while Activating the job.")
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUpdateJobClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
       if(!accessToken){
@@ -146,6 +154,8 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
     } catch (error) {
       // setMessage("An error occurred while updating the job.");
       alert("An error occurred while updating the job.");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -544,6 +554,14 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
             {message && (
               <p className="text-sm text-red-500 mt-2">{message}</p>
             )}
+
+      {loading && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+  </div>
+)}
+
+
           </form>
         </div>
       </div>
