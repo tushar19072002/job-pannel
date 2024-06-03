@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import jobUpdatesStore from "../redux/jobUpdatesStore";
 
 const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -57,15 +60,20 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
 
       if(response.ok){
         setStatus("INACTIVE");
-        setMessage("Job has been Deactivated.");
+        dispatch(jobUpdatesStore.dispatch({type:"JOB_UPDATED"}));
+        // setMessage("Job has been Deactivated.");
+        alert("Job has been Deactivated.");
       } else {
-        setMessage("Failed to deactivate the Job.");
+        // setMessage("Failed to deactivate the Job.");
+        alert("Failed to deactivate the Job.");
         }
 
     } catch (error) {
-      setMessage("An error occured while deactivating the job.")
+      // setMessage("An error occured while deactivating the job.")
+      alert("An error occured while deactivating the job.")
     }
   };
+  
   const handleActivateClick = async () =>{
     try {
       const accessToken = localStorage.getItem("session") ? JSON.parse(localStorage.getItem("session")).accessToken : null;
@@ -84,13 +92,17 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
 
       if(response.ok){
         setStatus("INACTIVE");
-        setMessage("Job has been Activated.");
+        dispatch(jobUpdatesStore.dispatch({type:"JOB_UPDATED"}));
+        // setMessage("Job has been Activated.");
+        alert("Job has been Activated.");
       } else {
-        setMessage("Failed to Activate the Job.");
+        // setMessage("Failed to Activate the Job.");
+        alert("Failed to Activate the Job.");
         }
 
     } catch (error) {
-      setMessage("An error occured while Activating the job.")
+      // setMessage("An error occured while Activating the job.")
+      alert("An error occured while Activating the job.")
     }
   };
 
@@ -123,14 +135,17 @@ const ViewUpdateJobModal = ({ isOpen, onClose, jobDetails}) => {
         }),
       });
       const data = await response.json();
-      if (response.status === 201){
-        setMessage("Job Details Updated Successfully");
+      if (response.status === 200){
+        dispatch(jobUpdatesStore.dispatch({type:"JOB_UPDATED"}));
+        // setMessage("Job Details Updated Successfully");
+        alert("Job Details Updated Successfully");
       }
       else{
         setMessage(data.message);
       }
     } catch (error) {
-      setMessage("An error occurred while updating the job.");
+      // setMessage("An error occurred while updating the job.");
+      alert("An error occurred while updating the job.");
     }
   };
 

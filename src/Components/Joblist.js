@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useLayoutEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Jobcard from './Jobcard';
 import { useSelector } from 'react-redux';
+import jobUpdatesStore from '../redux/jobUpdatesStore';
 
 const Joblist = () => {
   const [jobs, setJobs] = useState([]);
@@ -11,39 +12,55 @@ const Joblist = () => {
   const [filter, setFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const jobUpdated = jobUpdatesStore.getState().jobUpdated;
+  const [jobUpdatedState, setJobUpdatedState] = useState(jobUpdatesStore.getState().jobUpdated);
   const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    const unsubscribe = jobUpdatesStore.subscribe(() => {
+      setJobUpdatedState(jobUpdatesStore.getState().jobUpdated);
+    });
+  
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
-    }
-  }, [isLoggedIn, navigate]);
-
-  useEffect(() => {
-    const fetchJobs = async (page) => {
-      setLoading(true);
-      try {
-        let url = `https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&sortBy=title&sortOrder=asc`;
-        
-        
-        if (filter !== 'ALL') {
-          url += `&status=${filter}`;
-        }
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.statusCode === 200) {
-          setJobs(data.data);
-          setTotalPages(data.totalPages);
-        } else {
-          console.error('Failed to fetch jobs:', data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-      } finally {
-        setLoading(false);
+    } else if(jobUpdated) 
+      {
+        fetchJobs(currentPage);
+        jobUpdatesStore.dispatch({type:'JOB_UPDATE_RESET'})
       }
-    };
+  }, [isLoggedIn, navigate,jobUpdated]);
+
+  const fetchJobs = async (page) => {
+    setLoading(true);
+    try {
+      let url = `https://api-jobs.thinkscoopinc.com/job?page=${page}&limit=10&sortBy=title&sortOrder=asc`;
+      
+      
+      if (filter !== 'ALL') {
+        url += `&status=${filter}`;
+      }
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.statusCode === 200) {
+        setJobs(data.data);
+        setTotalPages(data.totalPages);
+      } else {
+        console.error('Failed to fetch jobs:', data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    
   
     fetchJobs(currentPage);
   }, [currentPage, filter, isLoggedIn]);
